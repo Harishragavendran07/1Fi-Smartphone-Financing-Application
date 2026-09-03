@@ -118,7 +118,9 @@ function ApplicationPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to submit application.");
+        throw new Error(
+          data.message || "Failed to submit application."
+        );
       }
 
       navigate("/application-success", {
@@ -150,15 +152,25 @@ function ApplicationPage() {
         </Link>
 
         <nav>
-          <Link to="/products/apple-iphone-17-pro">iPhone</Link>
-          <Link to="/products/samsung-galaxy-s24-ultra">Samsung</Link>
-          <Link to="/products/google-pixel-9-pro">Pixel</Link>
+          <Link to="/products/apple-iphone-17-pro">
+            iPhone
+          </Link>
+
+          <Link to="/products/samsung-galaxy-s24-ultra">
+            Samsung
+          </Link>
+
+          <Link to="/products/google-pixel-9-pro">
+            Pixel
+          </Link>
         </nav>
       </header>
 
       <main className="application-page">
         <section className="application-form-container">
-          <p className="form-tag">COMPLETE YOUR APPLICATION</p>
+          <p className="form-tag">
+            COMPLETE YOUR APPLICATION
+          </p>
 
           <h1>Tell us about yourself</h1>
 
@@ -232,10 +244,21 @@ function ApplicationPage() {
                   onChange={handleChange}
                   disabled={loading}
                 >
-                  <option value="">Select employment type</option>
-                  <option value="Salaried">Salaried</option>
-                  <option value="Self Employed">Self Employed</option>
-                  <option value="Student">Student</option>
+                  <option value="">
+                    Select employment type
+                  </option>
+
+                  <option value="Salaried">
+                    Salaried
+                  </option>
+
+                  <option value="Self Employed">
+                    Self Employed
+                  </option>
+
+                  <option value="Student">
+                    Student
+                  </option>
                 </select>
               </div>
             </div>
@@ -267,14 +290,20 @@ function ApplicationPage() {
               />
             </div>
 
-            {error && <p className="form-error">{error}</p>}
+            {error && (
+              <p className="form-error">
+                {error}
+              </p>
+            )}
 
             <button
               type="submit"
               className="submit-application-button"
               disabled={loading}
             >
-              {loading ? "Submitting Application..." : "Submit Application"}
+              {loading
+                ? "Submitting Application..."
+                : "Submit Application"}
             </button>
           </form>
         </section>
