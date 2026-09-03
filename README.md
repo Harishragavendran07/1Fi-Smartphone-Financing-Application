@@ -1,38 +1,41 @@
 1Fi Smartphone Financing Application
 
-About the Project:
+About the Project
 
-This project is a simple smartphone financing application.
-Users can browse the available phones, select a variant, choose an EMI plan and submit their financing application. The submitted application details are stored in PostgreSQL.
-The project connects the frontend, backend and database to complete the application process.
+This project is a simple full stack smartphone financing application.
 
-Features:
+Users can browse available smartphones, select a phone variant, choose an EMI plan and submit a financing application. The submitted application details are stored in PostgreSQL.
+
+The project connects a React frontend, Node.js and Express backend, and PostgreSQL database to complete the application process.
+
+Features
 
 • View available smartphones
 • View product details
 • Select phone variant
 • Select EMI plan
 • View selected plan details
+• View application summary
 • Fill and submit financing application
 • Basic form validation
 • Save application details in PostgreSQL
 • Show application submitted successfully message
 
-Technologies Used:
+Technologies Used
 
-Frontend:
+Frontend
 
 React
 Vite
 React Router DOM
 CSS
 
-Backend:
+Backend
 
 Node.js
 Express.js
 
-Database:
+Database
 
 PostgreSQL
 
@@ -54,7 +57,7 @@ Fill Application Form
    ↓
 Submit Application
    ↓
-Data saved in PostgreSQL
+Data Saved in PostgreSQL
    ↓
 Success Page
 
@@ -62,17 +65,23 @@ Project Structure
 
 Project-1fi
 │
+├── database
+│   └── onefi_db.sql
+│
 ├── express-backend
 │   ├── src
 │   │   ├── config
 │   │   │   └── db.js
+│   │   ├── routes
+│   │   │   └── productRoutes.js
 │   │   └── server.js
-│   ├── .env
+│   ├── .gitignore
 │   ├── package.json
 │   └── package-lock.json
 │
 ├── react-frontend
 │   ├── src
+│   │   ├── assets
 │   │   ├── pages
 │   │   │   ├── HomePage.jsx
 │   │   │   ├── ProductPage.jsx
@@ -80,7 +89,9 @@ Project-1fi
 │   │   │   ├── ApplicationPage.jsx
 │   │   │   └── ApplicationSuccessPage.jsx
 │   │   ├── App.jsx
-│   │   └── App.css
+│   │   ├── App.css
+│   │   └── main.jsx
+│   ├── .gitignore
 │   ├── package.json
 │   └── package-lock.json
 │
@@ -97,7 +108,7 @@ The following tables are used:
 • emi_plans
 • applications
 
-Relationship:
+Relationship
 
 products
    ↓
@@ -105,7 +116,23 @@ product_variants
    ↓
 emi_plans
 
-When a user submits an application, the selected product, variant and EMI plan IDs are stored in the applications table.
+The applications table stores the user details along with the selected product, variant and EMI plan.
+
+Database Setup
+
+The database schema and sample product data are available in:
+
+database/onefi_db.sql
+
+Create a PostgreSQL database:
+
+CREATE DATABASE onefi_db;
+
+Connect to the database:
+
+\c onefi_db
+
+Run the SQL file to create the tables and insert the sample data.
 
 Backend Setup
 
@@ -117,7 +144,7 @@ Install dependencies:
 
 npm install
 
-Create a .env file:
+Create a .env file with the following values:
 
 PORT=5000
 DB_HOST=localhost
@@ -130,7 +157,9 @@ Start the backend:
 
 npm run dev
 
-The backend runs on port 5000.
+The backend runs on:
+
+http://localhost:5000
 
 Frontend Setup
 
@@ -146,13 +175,42 @@ Start the frontend:
 
 npm run dev
 
+Open the URL shown by Vite in the browser.
+
 API Endpoints
 
-Get all products
+Health Check
+
+GET /api/health
+
+Example response:
+
+{
+  "success": true,
+  "message": "1Fi backend and database are running"
+}
+
+
+Get All Products
 
 GET /api/products
 
-Get product details
+Example response:
+
+{
+  "success": true,
+  "products": [
+    {
+      "id": 1,
+      "name": "Apple iPhone 17 Pro",
+      "slug": "apple-iphone-17-pro",
+      "brand": "Apple"
+    }
+  ]
+}
+
+
+Get Product Details
 
 GET /api/products/:slug
 
@@ -160,11 +218,61 @@ Example:
 
 GET /api/products/apple-iphone-17-pro
 
-Submit application
+Example response:
+
+{
+  "success": true,
+  "product": {
+    "id": 1,
+    "name": "Apple iPhone 17 Pro",
+    "brand": "Apple",
+    "variants": [
+      {
+        "id": 1,
+        "color": "Silver",
+        "storage": "256GB",
+        "price": "129900.00",
+        "emiPlans": [
+          {
+            "id": 1,
+            "tenureMonths": 6,
+            "interestRate": 0,
+            "monthlyAmount": 21650,
+            "cashback": 1000
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+Submit Application
 
 POST /api/applications
 
-The submitted application details along with the selected product, variant and EMI plan are saved in PostgreSQL.
+Example request:
+
+{
+  "fullName": "Test User",
+  "email": "test@example.com",
+  "mobile": "9092098875",
+  "dateOfBirth": "2005-07-10",
+  "employmentType": "Salaried",
+  "monthlyIncome": 50000,
+  "address": "Chennai, Tamil Nadu",
+  "productId": 1,
+  "variantId": 1,
+  "emiPlanId": 1
+}
+
+Example response:
+
+{
+  "success": true,
+  "message": "Application submitted successfully"
+}
+
 
 Sample Products
 
@@ -172,22 +280,24 @@ Sample Products
 • Samsung Galaxy S24 Ultra
 • Google Pixel 9 Pro
 
-Each product has different variants and EMI plans.
+Each product has multiple variants and EMI plans.
 
 How to Test
 
 1. Start PostgreSQL
-2. Start the backend
-3. Start the frontend
-4. Open the application in the browser
-5. Select a smartphone
-6. Select a variant
-7. Select an EMI plan
-8. Continue to checkout
-9. Fill in the application form
-10. Submit the application
-11. Check the success page
-12. Verify the data in PostgreSQL
+2. Create the onefi_db database
+3. Run the database/onefi_db.sql file
+4. Start the backend
+5. Start the frontend
+6. Open the application in the browser
+7. Select a smartphone
+8. Select a variant
+9. Select an EMI plan
+10. Continue to checkout
+11. Fill in the application form
+12. Submit the application
+13. Check the success page
+14. Verify the submitted data in PostgreSQL
 
 To check submitted applications:
 
