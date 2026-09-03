@@ -93,24 +93,27 @@ function ApplicationPage() {
       setLoading(true);
       setError("");
 
-      const response = await fetch("http://localhost:5000/api/applications", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fullName: formData.fullName.trim(),
-          email: formData.email.trim(),
-          phone: formData.phone,
-          dateOfBirth: formData.dateOfBirth,
-          employmentType: formData.employmentType,
-          monthlyIncome: Number(formData.monthlyIncome),
-          address: formData.address.trim(),
-          productId: product.id,
-          variantId: variant.id,
-          emiPlanId: plan.id,
-        }),
-      });
+      const response = await fetch(
+        "https://onefi-smartphone-financing-backend.onrender.com/api/applications",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName: formData.fullName.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone,
+            dateOfBirth: formData.dateOfBirth,
+            employmentType: formData.employmentType,
+            monthlyIncome: Number(formData.monthlyIncome),
+            address: formData.address.trim(),
+            productId: product.id,
+            variantId: variant.id,
+            emiPlanId: plan.id,
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -128,6 +131,8 @@ function ApplicationPage() {
         },
       });
     } catch (error) {
+      console.error("Failed to submit application:", error);
+
       setError(
         error.message ||
           "Something went wrong. Please check your backend and try again."

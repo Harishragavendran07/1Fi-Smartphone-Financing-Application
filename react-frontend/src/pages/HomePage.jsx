@@ -4,21 +4,29 @@ import { Link } from "react-router-dom";
 function HomePage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/products"
+          "https://onefi-smartphone-financing-backend.onrender.com/api/products"
         );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch products");
+        }
 
         const data = await response.json();
 
         if (data.success) {
           setProducts(data.products);
+        } else {
+          throw new Error(data.message || "Failed to fetch products");
         }
       } catch (error) {
         console.error("Failed to fetch products:", error);
+        setError("Unable to load products. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -29,6 +37,10 @@ function HomePage() {
 
   if (loading) {
     return <div className="loading">Loading products...</div>;
+  }
+
+  if (error) {
+    return <div className="loading">{error}</div>;
   }
 
   return (
@@ -53,58 +65,70 @@ function HomePage() {
         </nav>
       </header>
 
-      <section className="home">
-        <div className="hero">
-          <p className="hero-tag">SMART FINANCING MADE SIMPLE</p>
+      <main>
+        <section className="home">
+          <div className="hero">
+            <p className="hero-tag">
+              SMART FINANCING MADE SIMPLE
+            </p>
 
-          <h1>Buy your next phone with easy EMI.</h1>
+            <h1>Buy your next phone with easy EMI.</h1>
 
-          <p>
-            Choose your smartphone, select a variant, compare EMI plans,
-            and find the payment option that works for you.
-          </p>
-        </div>
-
-        <section className="products-section">
-          <h2>Featured Smartphones</h2>
-
-          <div className="products-grid">
-            {products.map((product) => {
-              const firstVariant = product.variants?.[0];
-
-              return (
-                <Link
-                  to={`/products/${product.slug}`}
-                  className="product-card"
-                  key={product.id}
-                >
-                  <div className="product-card-image">
-                    {firstVariant && (
-                      <img
-                        src={firstVariant.imageUrl}
-                        alt={product.name}
-                      />
-                    )}
-                  </div>
-
-                  <div className="product-card-content">
-                    <p>{product.brand}</p>
-
-                    <h3>{product.name}</h3>
-
-                    <span>
-                      Starting from ₹
-                      {firstVariant
-                        ? Number(firstVariant.price).toLocaleString("en-IN")
-                        : "N/A"}
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
+            <p>
+              Choose your smartphone, select a variant, compare EMI plans,
+              and find the payment option that works for you.
+            </p>
           </div>
+
+          <section className="products-section">
+            <h2>Featured Smartphones</h2>
+
+            {products.length === 0 ? (
+              <p>No products available.</p>
+            ) : (
+              <div className="products-grid">
+                {products.map((product) => {
+                  const firstVariant = product.variants?.[0];
+
+                  return (
+                    <Link
+                      to={`/products/${product.slug}`}
+                      className="product-card"
+                      key={product.id}
+                    >
+                      <div className="product-card-image">
+                        {firstVariant?.imageUrl ? (
+                          <img
+                            src={firstVariant.imageUrl}
+                            alt={product.name}
+                          />
+                        ) : (
+                          <div>No image available</div>
+                        )}
+                      </div>
+
+                      <div className="product-card-content">
+                        <p>{product.brand}</p>
+
+                        <h3>{product.name}</h3>
+
+                        <span>
+                          Starting from ₹
+                          {firstVariant
+                            ? Number(firstVariant.price).toLocaleString(
+                                "en-IN"
+                              )
+                            : "N/A"}
+                        </span>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </section>
         </section>
-      </section>
+      </main>
     </div>
   );
 }
