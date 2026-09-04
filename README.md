@@ -1,182 +1,121 @@
 # 1Fi Smartphone Financing Application
 
-A full-stack web application that allows users to browse smartphones, select a variant, choose an EMI plan, and submit a smartphone financing application.
+A full-stack web application where users can browse smartphones, select a variant and EMI plan, and submit a financing application.
 
-The application connects a React frontend, Node.js and Express backend, and PostgreSQL database to complete the financing application process.
+## Live Demo
 
----
+**Application:** https://onefi-smartphone-financing-application-2.onrender.com
+
+**Backend API:** https://onefi-smartphone-financing-backend.onrender.com
+
+**Health Check:** https://onefi-smartphone-financing-backend.onrender.com/api/health
 
 ## Features
 
-- View available smartphones
-- View detailed product information
-- Select a smartphone variant
-- Choose an EMI plan
-- View EMI details, including monthly amount, tenure, interest rate, and cashback
-- View an application summary before submitting
-- Fill and submit a financing application
-- Basic client-side form validation
-- Save application details in PostgreSQL
-- Display a successful application submission message
+- Browse available smartphones
+- View product details and variants
+- Select an EMI plan
+- View EMI details including tenure, interest rate, monthly amount, and cashback
+- Review the selected product and plan before applying
+- Submit a financing application
+- Basic form validation
+- Store application data in PostgreSQL
 
----
+## Tech Stack
 
-## Technologies Used
+**Frontend:** React, Vite, React Router DOM, CSS
 
-### Frontend
+**Backend:** Node.js, Express.js
 
-- React
-- Vite
-- React Router DOM
-- CSS
+**Database:** PostgreSQL
 
-### Backend
+**Deployment:** Render
 
-- Node.js
-- Express.js
-
-### Database
-
-- PostgreSQL
-
----
-
-## Project Flow
+## Application Flow
 
 ```text
-Home Page
-   ↓
-Select a Smartphone
-   ↓
-Product Details
-   ↓
-Select Variant
-   ↓
+Home
+  ↓
+Select Smartphone
+  ↓
+Choose Variant
+  ↓
 Select EMI Plan
-   ↓
+  ↓
 Checkout
-   ↓
-Fill Application Form
-   ↓
+  ↓
 Submit Application
-   ↓
-Data Saved in PostgreSQL
-   ↓
+  ↓
+PostgreSQL
+  ↓
 Success Page
 ```
-
----
 
 ## Project Architecture
 
 ```text
 React Frontend
-      ↓
-Express.js Backend
+      ↓ REST API
+Node.js + Express Backend
       ↓
 PostgreSQL Database
 ```
-
----
 
 ## Project Structure
 
 ```text
 Project-1fi
-│
 ├── database
 │   └── onefi_db.sql
-│
 ├── express-backend
-│   ├── src
-│   │   ├── config
-│   │   │   └── db.js
-│   │   ├── routes
-│   │   │   └── productRoutes.js
-│   │   └── server.js
-│   ├── .gitignore
-│   ├── package.json
-│   └── package-lock.json
-│
+│   └── src
+│       ├── config
+│       │   └── db.js
+│       └── server.js
 ├── react-frontend
-│   ├── src
-│   │   ├── assets
-│   │   ├── pages
-│   │   │   ├── HomePage.jsx
-│   │   │   ├── ProductPage.jsx
-│   │   │   ├── CheckoutPage.jsx
-│   │   │   ├── ApplicationPage.jsx
-│   │   │   └── ApplicationSuccessPage.jsx
-│   │   ├── App.jsx
-│   │   ├── App.css
-│   │   └── main.jsx
-│   ├── .gitignore
-│   ├── package.json
-│   └── package-lock.json
-│
+│   └── src
+│       ├── pages
+│       ├── App.jsx
+│       └── main.jsx
 └── README.md
 ```
 
----
-
 ## Database
 
-The project uses PostgreSQL.
-
-The following tables are used:
+The application uses the following PostgreSQL tables:
 
 - `products`
 - `product_variants`
 - `emi_plans`
 - `applications`
 
-### Database Relationship
-
-```text
-products
-   ↓
-product_variants
-   ↓
-emi_plans
-```
-
-The `applications` table stores user information along with the selected product, variant, and EMI plan.
-
-### Database Setup
-
-The database schema and sample product data are available in:
+The database schema and sample data are available in:
 
 ```text
 database/onefi_db.sql
 ```
 
-Create a PostgreSQL database:
+## Run Locally
 
-```sql
-CREATE DATABASE onefi_db;
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Harishragavendran07/1Fi-Smartphone-Financing-Application.git
+cd Project-1fi
 ```
 
-Connect to the database:
+### 2. Database Setup
 
-```sql
-\c onefi_db
+Create a PostgreSQL database named `onefi_db` and run:
+
+```text
+database/onefi_db.sql
 ```
 
-Run the SQL file to create the required tables and insert sample product data.
-
----
-
-## Backend Setup
-
-Go to the backend folder:
+### 3. Backend Setup
 
 ```bash
 cd express-backend
-```
-
-Install dependencies:
-
-```bash
 npm install
 ```
 
@@ -197,196 +136,22 @@ Start the backend:
 npm run dev
 ```
 
-The backend runs on:
-
-```text
-http://localhost:5000
-```
-
----
-
-## Frontend Setup
-
-Go to the frontend folder:
+### 4. Frontend Setup
 
 ```bash
 cd react-frontend
-```
-
-Install dependencies:
-
-```bash
 npm install
-```
-
-Start the frontend:
-
-```bash
 npm run dev
 ```
 
-Open the URL displayed by Vite in your browser.
-
----
-
 ## API Endpoints
 
-### Health Check
-
-```http
-GET /api/health
-```
-
-Example response:
-
-```json
-{
-  "success": true,
-  "message": "1Fi backend and database are running"
-}
-```
-
----
-
-### Get All Products
-
-```http
-GET /api/products
-```
-
-Example response:
-
-```json
-{
-  "success": true,
-  "products": [
-    {
-      "id": 1,
-      "name": "Apple iPhone 17 Pro",
-      "slug": "apple-iphone-17-pro",
-      "brand": "Apple"
-    }
-  ]
-}
-```
-
----
-
-### Get Product Details
-
-```http
-GET /api/products/:slug
-```
-
-Example:
-
-```http
-GET /api/products/apple-iphone-17-pro
-```
-
-Example response:
-
-```json
-{
-  "success": true,
-  "product": {
-    "id": 1,
-    "name": "Apple iPhone 17 Pro",
-    "brand": "Apple",
-    "variants": [
-      {
-        "id": 1,
-        "color": "Silver",
-        "storage": "256GB",
-        "price": "129900.00",
-        "emiPlans": [
-          {
-            "id": 1,
-            "tenureMonths": 6,
-            "interestRate": 0,
-            "monthlyAmount": 21650,
-            "cashback": 1000
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
----
-
-### Submit Financing Application
-
-```http
-POST /api/applications
-```
-
-Example request:
-
-```json
-{
-  "fullName": "Test User",
-  "email": "test@example.com",
-  "phone": "9092098875",
-  "dateOfBirth": "2005-07-10",
-  "employmentType": "Salaried",
-  "monthlyIncome": 50000,
-  "address": "Chennai, Tamil Nadu",
-  "productId": 1,
-  "variantId": 1,
-  "emiPlanId": 1
-}
-```
-
-Example response:
-
-```json
-{
-  "success": true,
-  "message": "Application submitted successfully"
-}
-```
-
----
-
-## Sample Products
-
-The application includes sample data for:
-
-- Apple iPhone 17 Pro
-- Samsung Galaxy S24 Ultra
-- Google Pixel 9 Pro
-
-Each product contains multiple variants and EMI plans.
-
----
-
-## How to Test
-
-1. Start PostgreSQL.
-2. Create the `onefi_db` database.
-3. Run `database/onefi_db.sql`.
-4. Configure the backend `.env` file.
-5. Start the backend.
-6. Start the frontend.
-7. Open the application in your browser.
-8. Select a smartphone.
-9. Select a variant.
-10. Choose an EMI plan.
-11. Continue to checkout.
-12. Fill in the financing application form.
-13. Submit the application.
-14. Verify the success page.
-15. Check the submitted data in PostgreSQL.
-
-To view submitted applications:
-
-```sql
-SELECT * FROM applications;
-```
-
----
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/health` | Check backend and database status |
+| GET | `/api/products` | Get all products |
+| GET | `/api/products/:slug` | Get product details with variants and EMI plans |
+| POST | `/api/applications` | Submit a financing application |
 
 ## Author
 
